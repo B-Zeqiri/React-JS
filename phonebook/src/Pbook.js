@@ -3,11 +3,39 @@ import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import './formStyling.css';
+
 
 
 const Pbook = () => {
 
-        
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+//addContanctVariables
+    const[name, setName] = useState('');
+    const[lastName, setLastName] = useState('');
+    const[address, setAddress] = useState('');
+    const[city, setCity] = useState('');
+    const[country, setCountry] = useState('');
+    const[email, setEmail] = useState('');
+    const[phoneNumber, setPhoneNumber] = useState('');
+
+//editContactVariables
+    const[editId, setEditId] =useState('');
+    const[editName, setEditName] = useState('');
+    const[editLastName, setEditLastName] = useState('');
+    const[editAddress, setEditAddress] = useState('');
+    const[editity, setEditCity] = useState('');
+    const[editCountry, setEditCountry] = useState('');
+    const[editEmail, setEditEmail] = useState('');
+    const[editPhoneNumber, setEditPhoneNumber] = useState('');
+
 
     const contact = [
         {
@@ -39,9 +67,16 @@ const Pbook = () => {
         setData(contact);
     },[])
 
+    //butoni per shtim te kontakteve
+    const handleadd =(id)=>{
+        //alert(id);
+        handleShow();
+    }
+
 {/*butoni per editim */}
     const handleEdit =(id)=>{
-        alert(id);
+        //alert(id);
+        handleShow();
     }
 
 {/*butoni per fshirje */}
@@ -51,10 +86,33 @@ const Pbook = () => {
         }
     }
 
+    const handleUpdate = () =>{
+        
+    }
+
     return(
         <Fragment>
+        <header>
+            <h1>Phone Book</h1>
+        </header>
+
+             {/*<Container>
+                <Row>
+                    <Col xs={6} md={4}>
+                       <input type="text" className="form-control" placeholder="Name..."/>
+                    </Col>
+                    <Col xs={6} md={4}>
+                       <input type="text" className="form-control" placeholder="Last Name..."/>
+                    </Col>
+                    <Col xs={6} md={4}>
+                       <input type="text" className="form-control" placeholder="Address..."/>
+                    </Col>
+          </Row>
+    </Container>*/}
+
             <Table striped bordered hover size="sm">
       <thead>
+        <Button className="btn btn-primary">New Contact</Button>
         <tr>
           <th>Name</th>
           <th>LastName</th>
@@ -80,7 +138,7 @@ const Pbook = () => {
                        <td>{item.phoneNumber}</td>
                        {/*dy butonat */}
                        <td colSpan={2}>
-                        <button className="btn btn-primary" onClick={()=> handleEdit(item.id)}>Edit</button> &nbsp;
+                        <button className="btn btn-primary" onClick={()=> handleEdit(item.id)}>Edit</button>
                         <button className="btn btn-danger" onClick={()=> handleDelete(item.id)}>Delete</button>
                        </td>
                     </tr>
@@ -91,9 +149,44 @@ const Pbook = () => {
         }
       </tbody>
     </Table>
-
-    
-
+    <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Editing...</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <th>
+          <tr>
+          <input type="text" className="form-control " placeholder="Name..."/>
+          </tr>
+          <tr>
+          <input type="text" className="form-control" placeholder="Last Name..."/>
+          </tr>
+          <tr>
+          <input type="text" className="form-control" placeholder="Address..."/>
+          </tr>
+          <tr>
+          <input type="text" className="form-control" placeholder="City..."/>
+          </tr>
+          <tr>
+          <input type="text" className="form-control" placeholder="Country..."/>
+          </tr>
+          <tr>
+          <input type="text" className="form-control" placeholder="Email..."/>
+          </tr>
+          <tr>
+          <input type="text" className="form-control" placeholder="Phone..."/>
+          </tr>
+        </th>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleUpdate}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
             </Fragment>
 
     )
