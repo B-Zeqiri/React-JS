@@ -11,11 +11,15 @@ import './formStyling.css';
 
 
 const Pbook = () => {
-
+//editModal
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+//addNewModal
+    const [showNew, setShowNew] = useState(false);
+    const handleCloseNew = () => setShowNew(false);
+    const handleShowNew = () => setShowNew(true);
 
 //addContanctVariables
     const[name, setName] = useState('');
@@ -31,10 +35,14 @@ const Pbook = () => {
     const[editName, setEditName] = useState('');
     const[editLastName, setEditLastName] = useState('');
     const[editAddress, setEditAddress] = useState('');
-    const[editity, setEditCity] = useState('');
+    const[editCity, setEditCity] = useState('');
     const[editCountry, setEditCountry] = useState('');
     const[editEmail, setEditEmail] = useState('');
     const[editPhoneNumber, setEditPhoneNumber] = useState('');
+
+    const contactsData=[
+
+    ]
 
 
     const contact = [
@@ -72,6 +80,11 @@ const Pbook = () => {
         //alert(id);
         handleShow();
     }
+//butoni per shtim te kontaktit.
+const handleAddNew =(id)=>{
+    //alert(id);
+    handleShowNew();
+}
 
 {/*butoni per editim */}
     const handleEdit =(id)=>{
@@ -95,24 +108,11 @@ const Pbook = () => {
         <header>
             <h1>Phone Book</h1>
         </header>
-
-             {/*<Container>
-                <Row>
-                    <Col xs={6} md={4}>
-                       <input type="text" className="form-control" placeholder="Name..."/>
-                    </Col>
-                    <Col xs={6} md={4}>
-                       <input type="text" className="form-control" placeholder="Last Name..."/>
-                    </Col>
-                    <Col xs={6} md={4}>
-                       <input type="text" className="form-control" placeholder="Address..."/>
-                    </Col>
-          </Row>
-    </Container>*/}
-
             <Table striped bordered hover size="sm">
       <thead>
-        <Button className="btn btn-primary">New Contact</Button>
+       
+                <Button className="btn btn-primary" onClick={()=>handleAddNew()}>New Contact</Button>
+
         <tr>
           <th>Name</th>
           <th>LastName</th>
@@ -148,6 +148,7 @@ const Pbook = () => {
             'Loading...'
         }
       </tbody>
+      {/*editModal*/}
     </Table>
     <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -156,25 +157,25 @@ const Pbook = () => {
         <Modal.Body>
         <th>
           <tr>
-          <input type="text" className="form-control " placeholder="Name..."/>
+          <input type="text" className="form-control m-2" placeholder="Name..." value={editName} onChange={(e)=> setEditName(e.target.value)}/>
           </tr>
           <tr>
-          <input type="text" className="form-control" placeholder="Last Name..."/>
+          <input type="text" className="form-control m-2" placeholder="Last Name..." value={editLastName} onChange={(e)=> setEditLastName(e.target.value)}/>
           </tr>
           <tr>
-          <input type="text" className="form-control" placeholder="Address..."/>
+          <input type="text" className="form-control m-2" placeholder="Address..." value={editAddress} onChange={(e)=> setEditAddress(e.target.value)}/>
           </tr>
           <tr>
-          <input type="text" className="form-control" placeholder="City..."/>
+          <input type="text" className="form-control m-2" placeholder="City..." value={editCity} onChange={(e)=> setEditCity(e.target.value)}/>
           </tr>
           <tr>
-          <input type="text" className="form-control" placeholder="Country..."/>
+          <input type="text" className="form-control m-2" placeholder="Country..." value={editCountry} onChange={(e)=> setEditCountry(e.target.value)}/>
           </tr>
           <tr>
-          <input type="text" className="form-control" placeholder="Email..."/>
+          <input type="text" className="form-control m-2" placeholder="Email..." value={editEmail} onChange={(e)=> setEditEmail(e.target.value)}/>
           </tr>
           <tr>
-          <input type="text" className="form-control" placeholder="Phone..."/>
+          <input type="text" className="form-control m-2" placeholder="Phone..." value={editPhoneNumber} onChange={(e)=> setEditPhoneNumber(e.target.value)}/>
           </tr>
         </th>
         </Modal.Body>
@@ -183,6 +184,46 @@ const Pbook = () => {
             Close
           </Button>
           <Button variant="primary" onClick={handleUpdate}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/*AddNewModal*/}
+      <Modal show={showNew} onHide={handleCloseNew}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <th>
+          <tr>
+          <input type="text" className="form-control m-2" placeholder="Name..." value={name} onChange={(e)=> setName(e.target.value)}/>
+          </tr>
+          <tr>
+          <input type="text" className="form-control m-2" placeholder="Last Name..." value={lastName} onChange={(e)=> setLastName(e.target.value)}/>
+          </tr>
+          <tr>
+          <input type="text" className="form-control m-2" placeholder="Address..." value={address} onChange={(e)=> setAddress(e.target.value)}/>
+          </tr>
+          <tr>
+          <input type="text" className="form-control m-2" placeholder="City..." value={city} onChange={(e)=> setCity(e.target.value)}/>
+          </tr>
+          <tr>
+          <input type="text" className="form-control m-2" placeholder="Country..." value={country} onChange={(e)=> setCountry(e.target.value)}/>
+          </tr>
+          <tr>
+          <input type="text" className="form-control m-2" placeholder="Email..." value={email} onChange={(e)=> setEmail(e.target.value)}/>
+          </tr>
+          <tr>
+          <input type="text" className="form-control m-2" placeholder="Phone..." value={phoneNumber} onChange={(e)=> setPhoneNumber(e.target.value)}/>
+          </tr>
+        </th>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseNew}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleCloseNew}>
             Save Changes
           </Button>
         </Modal.Footer>
