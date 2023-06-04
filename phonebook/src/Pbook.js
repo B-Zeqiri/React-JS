@@ -7,6 +7,9 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import './formStyling.css';
+import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -72,39 +75,130 @@ const Pbook = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        setData(contact);
+        getData();
     },[])
 
-    //butoni per shtim te kontakteve
-    const handleadd =(id)=>{
-        //alert(id);
-        handleShow();
+//funksioni per marrjen e te dhenave
+    const getData = () =>{
+      axios.get('http://localhost:5109/api/Contacts')
+      .then((result)=>{
+        setData(result.data)
+      })
+      .catch((error)=>{
+        console.log(error);
+      })
     }
-//butoni per shtim te kontaktit.
+
+//butoni per hapjen e modalit per shtim te kontaktit.
 const handleAddNew =(id)=>{
-    //alert(id);
     handleShowNew();
 }
 
-{/*butoni per editim */}
+//nutoni per shtim te kontaktit
+const handleSave=()=>{
+  const url = 'http://localhost:5109/api/Contacts';
+  const data = {
+    "name": name,
+    "lastName": lastName,
+    "address": address,
+    "city": city,
+    "country": country,
+    "email": email,
+    "phoneNumber": phoneNumber
+  }
+
+  axios.post(url, data)
+  .then((result)=>{
+    handleCloseNew();
+    getData();
+    clear();
+    toast.success('Contact has been added.')
+  }).catch((error)=>{
+    toast.error(error);
+  })
+}
+//funksioni per fshirjen e te gjitha fushave pas shtimit ose editimit te kontaktit
+const clear =()=>{
+  setName('');
+  setLastName('');
+  setAddress('');
+  setCity('');
+  setCountry('');
+  setEmail('');
+  setPhoneNumber('');
+
+  setEditName('');
+  setEditLastName('');
+  setEditAddress('');
+  setEditCity('');
+  setEditCountry('');
+  setEditEmail('');
+  setEditPhoneNumber('');
+  setEditId('');
+}
+
+{/*funksioni per editim */}
     const handleEdit =(id)=>{
-        //alert(id);
         handleShow();
+        axios.get(`http://localhost:5109/api/Contacts/${id}`)
+        .then((result)=>{
+          setEditName(result.data.name);
+          setEditLastName(result.data.lastName);
+          setEditAddress(result.data.address);
+          setEditCity(result.data.city);
+          setEditCountry(result.data.country);
+          setEditEmail(result.data.email);
+          setEditPhoneNumber(result.data.phoneNumber);
+          setEditId(id);
+        }).catch((error)=>{
+          console.log(error)
+        })
     }
 
-{/*butoni per fshirje */}
+{/*funksioni per fshirje */}
     const handleDelete =(id)=>{
         if(window.confirm("Do you want to delete this contact?") == true){
-            alert(id);
+            axios.delete(`http://localhost:5109/api/Contacts/${id}`)
+            .then((result)=>{
+              if(result.status == 200)
+              {
+                toast.success('Contact has been deleted successfully.')
+                getData();
+              }
+            }).catch((error)=>{
+              toast.error(error);
+            })
+            
         }
     }
 
     const handleUpdate = () =>{
-        
-    }
+        const url = `http://localhost:5109/api/Contacts/${editId}`;
+        const data = {
+          "id": editId,
+          "name": editName,
+          "lastName": editLastName,
+          "address": editAddress,
+          "city": editCity,
+          "country": editCountry,
+          "email": editEmail,
+          "phoneNumber": editPhoneNumber
+        }
+
+         axios.put(url, data)
+         .then((result)=>{
+          handleClose();
+         getData();
+         clear();
+         toast.success('Contact has been edited.')
+         }).catch((error)=>{
+         toast.error(error);
+         })
+        }
 
     return(
         <Fragment>
+          <ToastContainer/>
         <header>
             <h1>Phone Book</h1>
         </header>
@@ -184,7 +278,7 @@ const handleAddNew =(id)=>{
             Close
           </Button>
           <Button variant="primary" onClick={handleUpdate}>
-            Save Changes
+            Edit
           </Button>
         </Modal.Footer>
       </Modal>
@@ -223,8 +317,8 @@ const handleAddNew =(id)=>{
           <Button variant="secondary" onClick={handleCloseNew}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleCloseNew}>
-            Save Changes
+          <Button variant="primary" onClick={()=> handleSave()}>
+            New Contact
           </Button>
         </Modal.Footer>
       </Modal>
